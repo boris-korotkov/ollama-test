@@ -44,7 +44,7 @@ The overall architecture is as follows:
 ### Frontend Server
 - Built with Node.js and React
 - The core file is `chatbot-ui/src/Chatbot.js`
-- Start the frontend server at port 3000 with: `npm start` (from the `chatbot-ui` directory)
+- Start the frontend server at port **3000** with: `npm start` (from the `chatbot-ui` directory)
 
 ### Web Scraping Module
 - The script `article_ingestion.py` scrapes articles from links listed in `links.txt`
