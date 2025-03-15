@@ -9,7 +9,7 @@ One day, a friend reached out with a question about Ollama, asking if it was rea
 I'm not a full-stack developer, so I collaborated with ChatGPT to build this Proof of Concept (PoC). Initially, my plan was to test it with DeepSeek or Qwen if the results were unsatisfactory. Surprisingly, ChatGPT performed well, and through iterative prompting, I was able to create a working prototype.
 
 In the first iteration, I developed a simple chatbot using:
-- **Backend:** Python, Ollama, FastAPI, and Uvicorn web server
+- **Backend:** Python, Ollama, FastAPI, ChromaDB, and Uvicorn web server
 - **Frontend:** Node.js and React
 
 I found that Ollama provided a quick and simple way to experiment with different models. Since this was a PoC, I selected the `deepseek-r1` model with 8 billion parameters. The model size was around 5GB, so my hardware needed to be sufficient to run it.
