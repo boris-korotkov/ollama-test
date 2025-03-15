@@ -28,8 +28,9 @@ To ensure relevance, I selected articles published after July 2024. For this, I 
 ## Architecture Overview
 The overall architecture is as follows:
 1. A user enters a prompt in the chat window.
-2. The frontend chatbot engine sends the prompt to the backend server.
+2. The frontend chatbot engine sends the prompt to the backend server using an API call.
 3. The backend retrieves relevant information from the local vector database (ChromaDB) and sends it as context to the model.
+4. The generated response from the model is translated back to the frontend and is displayed to the user.  
 
 ![Architecture Diagram](/images/chatbot.png)
 
