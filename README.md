@@ -1,47 +1,68 @@
-# A Retrieval-Augmented Generation (RAG) AI chatbot.
+# Retrieval-Augmented Generation (RAG) AI Chatbot
 
-Since I've created a Chatbot Proof of Concept (PoC), I always wanted to create a chatbot that would use Retrieval-Augmented Generation (RAG) technology to enhance it's response based on the additional files or information from the Internet. 
+## Introduction
+I've always wanted to create a chatbot that leverages Retrieval-Augmented Generation (RAG) to enhance responses using additional files or information from the Internet. However, life’s priorities often got in the way.
 
-However, there were other priorities in my life as usual until my friend reached me one day with a question about Ollama. He asked if it was realistic to build an AI chatbot using Ollama,  not a simple one, but with ability to enhance a response using the articles from the Internet.
+One day, a friend reached out with a question about Ollama, asking if it was realistic to build an AI chatbot using Ollama—not just a simple chatbot, but one capable of enhancing responses with articles from the Internet. That question reignited my motivation. I had been procrastinating on building one for myself, but if it could help someone else, why not?
 
-That was a gift of the fate for me and a strong motivation to start doing something. I was lazy to do that for myself, but if it could help someone else, why not?
+## Project Background
+I'm not a full-stack developer, so I collaborated with ChatGPT to build this Proof of Concept (PoC). Initially, my plan was to test it with DeepSeek or Qwen if the results were unsatisfactory. Surprisingly, ChatGPT performed well, and through iterative prompting, I was able to create a working prototype.
 
-I'm not a full stack developer. Therefore, I cooperate with Chat GPT on building a Proof of Concept for this chatbot. The plan was to try it and go with Deep Seek or Qwen if it was not successful. Surprisingly, the Chat GPT was quite good and I was able to create a working prototype going back and forward with multiple prompts.
+In the first iteration, I developed a simple chatbot using:
+- **Backend:** Python, Ollama, FastAPI, and Uvicorn web server
+- **Frontend:** Node.js and React
 
-As the first iteration, I've created a simple chatbot using Python, Ollama,FastAPI, and uvicorn web-server as my backend interface and Nodes.JS and React as a front-end interface.
-I found that Ollama provided very quick and simple way to use different models. Because the purpose as to create a proof of concept I selected deepseek-r1 model with 8 billion parameters. The model size was about 5Gb and my hardware had to be sufficient to run it. 
+I found that Ollama provided a quick and simple way to experiment with different models. Since this was a PoC, I selected the `deepseek-r1` model with 8 billion parameters. The model size was around 5GB, so my hardware needed to be sufficient to run it.
 
-The next and the most interesting portion was to implement RAG. Given that additional information is to come from the Internet articles, I created a Python module that performs web scrapping based on the links provided in the text file. 
+## Implementing RAG
+The most interesting challenge was implementing RAG. Since additional information was to be retrieved from Internet articles, I developed a Python module for web scraping based on links stored in a text file.
 
-The modern models are usually trained based on Internet content. Therefore, I identified the latest training date for Deep Seek model using Deep Seek chat itself. It was defined as  July 2024. Despite the chat used V3 model, the release date of R1 and V3 are very close and they most likely had very close training date.
-![R1 latest training date](/images/DeepSeek_latest_training_date.png)
+Modern AI models are typically trained on vast amounts of internet content. To ensure my chatbot was providing up-to-date information, I identified the latest training date of the DeepSeek model using DeepSeek chat itself. It was determined to be **July 2024** (though this was based on the V3 model, the R1 and V3 release dates are very close, implying similar training data).
 
-I had to make sure that articles I selected for augmentation had been ublished after July 2024. So, I chose my favorite company web-site (www.sunlife.com) and went for the news section. What could be better for my purpose than news?!
+![DeepSeek Latest Training Date](/images/DeepSeek_latest_training_date.png)
 
-![SLF News example](/images/slf_news.png)
+To ensure relevance, I selected articles published after July 2024. For this, I chose my favorite company website—[Sun Life](https://www.sunlife.com)—and targeted its news section. What better source for fresh information than news articles?
 
-The overall architecture is below.
-A user enter a prompt in the chat window. The front end chatbot engine sends the prompt to the backend server which retrieve the relevant information from the local vector database (ChromaDB) and send it as a context to the model. 
+![Sun Life News Example](/images/slf_news.png)
 
-![Architecture diagram](/images/chatbot.png)
+## Architecture Overview
+The overall architecture is as follows:
+1. A user enters a prompt in the chat window.
+2. The frontend chatbot engine sends the prompt to the backend server.
+3. The backend retrieves relevant information from the local vector database (ChromaDB) and sends it as context to the model.
 
-### The key files are the following:
+![Architecture Diagram](/images/chatbot.png)
 
-+ Backend server: chatbot-backend\backend.py
-It needs to be run from chatbot-backend using "Python backend.py" command. It becomes available at port 8000 and open for API calls.
+## Key Components
 
-+ Front-end server: It comes with Node.JS and React framework, but the core file is chatbot-ui\src\Chatbot.js. To start front-end server, we need to execute 'npm start' command from the chatbot-ui folder.
+### Backend Server
+- Located in `chatbot-backend/backend.py`
+- Run using the command: `python backend.py`
+- Starts a FastAPI server on port **8000**, open for API calls
 
-+ Web Scrappng. Finally, to scrape the articles from the Internet we need to run article_ingestion.py file which takes links from links.txt file, create a vector from the article content, and update the Chroma database. To avoid duplication and increase the efficiency, it adds the processed links to the processed_links.txt file and does not scrape the same links multiple times.
+### Frontend Server
+- Built with Node.js and React
+- The core file is `chatbot-ui/src/Chatbot.js`
+- Start the frontend server with: `npm start` (from the `chatbot-ui` directory)
 
-To validate that my chatbot became a RAG one, I've seen in one article that Sun Life had C$1.54 trillion total assets under management as of December 31, 2024. 
+### Web Scraping Module
+- The script `article_ingestion.py` scrapes articles from links listed in `links.txt`
+- Extracted content is converted into vector embeddings and stored in ChromaDB
+- To avoid duplicate processing, scraped links are stored in `processed_links.txt`
 
-![SLF Total assets](/images/slf_total_assets.png)
+## Validating RAG Integration
+To confirm that my chatbot was successfully using RAG, I tested it with a fact I found in a Sun Life news article stating that *Sun Life had C$1.54 trillion in total assets under management as of December 31, 2024*.
 
-I entered a prompt "What was total assets managed by Sun Life as of December31, 2024?" and I got the correct response! Voilà!  It worked!
+![Sun Life Total Assets](/images/slf_total_assets.png)
 
-![Chatbot result](/images/chatbot_result.png)
+I entered the prompt: **"What were the total assets managed by Sun Life as of December 31, 2024?"**
 
-Thank you so much for reading! I hope that can motivate you to start your journey!
+The chatbot provided the correct response! Voilà—RAG was working!
 
+![Chatbot Result](/images/chatbot_result.png)
+
+---
+
+## Conclusion
+Thank you for reading! I hope this project inspires you to start your own AI chatbot journey. If you have any questions, feel free to reach out!
 
